@@ -44,6 +44,13 @@ initial_theta = np.zeros(n + 1)
 # Compute and display initial cost and gradient
 cost, grad = cf.cost_function(initial_theta, X, y)
 
+np.set_printoptions(formatter={'float': '{: 0.4f}\n'.format})
+
+print('Cost at initial theta (zeros): {:0.3f}'.format(cost))
+print('Expected cost (approx): 0.693')
+print('Gradient at initial theta (zeros): \n{}'.format(grad))
+print('Expected gradients (approx): \n-0.1000\n-12.0092\n-11.2628')
+
 
 
 
