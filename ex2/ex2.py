@@ -56,4 +56,3 @@ print('Expected gradients (approx): \n-0.1000\n-12.0092\n-11.2628')
 
 
 
-
