@@ -3,7 +3,7 @@ import numpy as np
 import scipy.io as scio
 
 import display_data as dd
-import lr_cost_function as lCF
+import lr_cost_function as lcf
 # import oneVsAll as ova
 # import predictOneVsAll as pova
 
@@ -47,7 +47,19 @@ input('Program paused. Press ENTER to continue')
 # Test case for lr_cost_function
 print('Testing lr_cost_function()')
 
+theta_t = np.array([-2, -1, 1, 2])
+X_t = np.c_[np.ones(5), np.arange(1, 16).reshape((3, 5)).T/10]
+y_t = np.array([1, 0, 1, 0, 1])
+lmda_t = 3
+cost, grad = lcf.lr_cost_function(theta_t, X_t, y_t, lmda_t)
 
+np.set_printoptions(formatter={'float': '{: 0.6f}'.format})
+print('Cost: {:0.7f}'.format(cost))
+print('Expected cost: 2.534819')
+print('Gradients:\n{}'.format(grad))
+print('Expected gradients:\n[ 0.146561 -0.548558 0.724722 1.398003]')
+
+input('Program paused. Press ENTER to continue')
 
 
 
