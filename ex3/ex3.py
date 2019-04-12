@@ -4,8 +4,8 @@ import scipy.io as scio
 
 import display_data as dd
 import lr_cost_function as lcf
-# import oneVsAll as ova
-# import predictOneVsAll as pova
+import one_vs_all as ova
+import predict_one_vs_all as pova
 
 
 plt.ion()
@@ -61,5 +61,20 @@ print('Expected gradients:\n[ 0.146561 -0.548558 0.724722 1.398003]')
 
 input('Program paused. Press ENTER to continue')
 
+# ===================== Part 2-b: One-vs-All Training =====================
+print('Training One-vs-All Logistic Regression ...')
+
+lmd = 0.1
+all_theta = ova.one_vs_all(X, y, num_labels, lmd)
+
+input('Program paused. Press ENTER to continue')
+
+# ===================== Part 3: Predict for One-Vs-All =====================
+
+pred = pova.predict_one_vs_all(all_theta, X)
+
+print('Training set accuracy: {}'.format(np.mean(pred == y)*100))
+
+input('ex3 Finished. Press ENTER to exit')
 
 

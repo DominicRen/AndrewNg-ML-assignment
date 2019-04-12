@@ -29,7 +29,4 @@ def lr_cost_function(theta, X, y, lmd):
     # =========================================================
 
     return cost, grad
-
-
-
-
+    
