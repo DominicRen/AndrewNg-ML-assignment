@@ -4,10 +4,10 @@ import scipy.io as scio
 import linear_reg_cost_function as lrcf
 import train_linear_reg as tlr
 import learning_curve as lc
-# import polyFeatures as pf
-# import featureNormalize as fn
-# import plotFit as plotft
-# import validationCurve as vc
+import poly_features as pf
+import feature_normalize as fn
+import plot_fit as plotft
+import validation_curve as vc
 
 
 plt.ion()
@@ -100,5 +100,81 @@ plt.axis([0, 13, 0, 150])
 
 input('Program paused. Press ENTER to continue')
 
+# ===================== Part 6 : Feature Mapping for Polynomial Regression =====================
+# One solution to this is to use polynomial regression. You should now
+# complete poly_features to map each example into its powers
+#
 
+p = 5
+
+# Map X onto Polynomial Features and Normalize
+X_poly = pf.poly_features(X, p)
+X_poly, mu, sigma = fn.feature_normalize(X_poly)
+X_poly = np.c_[np.ones(m), X_poly]
+
+# Map X_poly_test and normalize (using mu and sigma)
+X_poly_test = pf.poly_features(Xtest, p)
+X_poly_test -= mu
+X_poly_test /= sigma
+X_poly_test = np.c_[np.ones(X_poly_test.shape[0]), X_poly_test]
+
+# Map X_poly_val and normalize (using mu and sigma)
+X_poly_val = pf.poly_features(Xval, p)
+X_poly_val -= mu
+X_poly_val /= sigma
+X_poly_val = np.c_[np.ones(X_poly_val.shape[0]), X_poly_val]
+
+print('Normalized Training Example 1 : \n{}'.format(X_poly[0]))
+
+input('Program paused. Press ENTER to continue')
+
+# ===================== Part 7 : Learning Curve for Polynomial Regression =====================
+# Now, you will get to experiment with polynomial regression with multiple
+# values of lambda. The code below runs polynomial regression with
+# lambda = 0. You should try running the code with different values of
+# lambda to see how the fit and learning curve change.
+#
+
+lmd = 0
+theta = tlr.train_linear_reg(X_poly, y, lmd)
+
+# Plot trainint data and fit
+plt.figure()
+plt.scatter(X, y, c='r', marker="x")
+plotft.plot_fit(np.min(X), np.max(X), mu, sigma, theta, p)
+plt.xlabel('Change in water level (x)')
+plt.ylabel('Water folowing out of the dam (y)')
+plt.ylim([0, 60])
+plt.title('Polynomial Regression Fit (lambda = {})'.format(lmd))
+
+error_train, error_val = lc.learning_curve(X_poly, y, X_poly_val, yval, lmd)
+plt.figure()
+plt.plot(np.arange(m), error_train, np.arange(m), error_val)
+plt.title('Polynomial Regression Learning Curve (lambda = {})'.format(lmd))
+plt.legend(['Train', 'Cross Validation'])
+plt.xlabel('Number of Training Examples')
+plt.ylabel('Error')
+plt.axis([0, 13, 0, 150])
+
+print('Polynomial Regression (lambda = {})'.format(lmd))
+print('# Training Examples\tTrain Error\t\tCross Validation Error')
+for i in range(m):
+    print('  \t{}\t\t{}\t{}'.format(i, error_train[i], error_val[i]))
+
+input('Program paused. Press ENTER to continue')
+
+# ===================== Part 8 : Validation for Selecting Lambda =====================
+# You will now implement validationCurve to test various values of
+# lambda on a validation set. You will then use this to select the
+# 'best' lambda value.
+
+lambda_vec, error_train, error_val = vc.validation_curve(X_poly, y, X_poly_val, yval)
+
+plt.figure()
+plt.plot(lambda_vec, error_train, lambda_vec, error_val)
+plt.legend(['Train', 'Cross Validation'])
+plt.xlabel('lambda')
+plt.ylabel('Error')
+
+input('ex5 Finished. Press ENTER to exit')
 
