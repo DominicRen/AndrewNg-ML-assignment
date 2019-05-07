@@ -3,7 +3,7 @@ import numpy as np
 import scipy.io as scio
 from skimage import io
 from skimage import img_as_float
-# import runkMeans as km
+import run_k_means as km
 import find_closest_centroids as fc
 import compute_centroids as cc
 # import kMeansInitCentroids as kmic
@@ -54,6 +54,46 @@ print(' [ 5.813503 2.633656 ]')
 print(' [ 7.119387 3.616684 ]]')
 
 input('Program paused. Press ENTER to continue')
+
+# ===================== Part 3: K-Means Clustering =====================
+# After you have completed the two functions compute_centroids and
+# find_closest_centroids, you will have all the necessary pieces to run the
+# kMeans algorithm. In this part, you will run the K-Means algorithm on
+# the example dataset we have provided.
+#
+
+print('Running K-Means Clustering on example dataset.')
+
+# Load an example dataset
+data = scio.loadmat('ex7data2.mat')
+X = data['X']
+
+# Settings for running K-Means
+K = 3
+max_iters = 10
+
+# For consistency, here we set centroids to specific values
+# but in practice you want to generate them automatically, such as by
+# settings them to be random examples (as can be seen in
+# kMeansInitCentroids).
+
+initial_centroids = np.array([[3, 3], [6, 2], [8, 5]])
+
+# Run K-Means algorithm. The 'true' at the end tells our function to plot
+# the progress of K-Means
+centroids, idx = km.run_kmeans(X, initial_centroids, max_iters, True)
+print('K-Means Done.')
+
+input('Program paused. Press ENTER to continue')
+
+# ===================== Part 4: K-Means Clustering on Pixels =====================
+#  In this exercise, you will use K-Means to compress an image. To do this,
+#  you will first run K-Means on the colors of the pixels in the image and
+#  then you will map each pixel onto its closest centroid.
+#
+#  You should now complete the code in kMeansInitCentroids.m
+#
+
 
 
 
