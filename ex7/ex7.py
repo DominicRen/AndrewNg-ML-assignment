@@ -6,7 +6,7 @@ from skimage import img_as_float
 import run_k_means as km
 import find_closest_centroids as fc
 import compute_centroids as cc
-# import kMeansInitCentroids as kmic
+import kmeans_init_centroids as kmic
 
 
 plt.ion()
@@ -94,9 +94,66 @@ input('Program paused. Press ENTER to continue')
 #  You should now complete the code in kMeansInitCentroids.m
 #
 
+print('Running K-Means clustering on pixels from an image')
 
+# Load an image of a bird
+image = io.imread('bird_small.png')
+image = img_as_float(image)
 
+# Size of the image
+img_shape = image.shape
 
+# Reshape the image into an Nx3 matrix where N = number of pixels.
+# Each row will contain the Red, Green and Blue pixel values
+# This gives us our dataset matrix X that we will use K-Means on.
+
+X = image.reshape(img_shape[0] * img_shape[1], 3)
+
+# Run your K-Means algorithm on this data
+# You should try different values of K and max_iters here
+K = 16
+max_iters = 10
+
+# When using K-Means, it is important the initialize the centroids
+# randomly.
+# You should complete the code in kMeansInitCentroids.py before proceeding
+initial_centroids = kmic.kmeans_init_centroids(X, K)
+
+# Run K-Means
+centroids, idx = km.run_kmeans(X, initial_centroids, max_iters, False)
+print('K-Means Done.')
+
+input('Program paused. Press ENTER to continue')
+
+# ===================== Part 5: Image Compression =====================
+# In this part of the exercise, you will use the clusters of K-Means to
+# compress an image. To do this, we first find the closest clusters for
+# each example.
+
+print('Applying K-Means to compress an image.')
+
+# Find closest cluster members
+idx = fc.find_closest_centroids(X, centroids)
+
+# Essentially, now we have represented the image X as in terms of the
+# indices in idx.
+
+# We can now recover the image from the indices (idx) by mapping each pixel
+# (specified by its index in idx) to the centroid value
+X_recovered = centroids[idx]
+
+# Reshape the recovered image into proper dimensions
+X_recovered = np.reshape(X_recovered, (img_shape[0], img_shape[1], 3))
+
+plt.subplot(2, 1, 1)
+plt.imshow(image)
+plt.title('Original')
+
+plt.subplot(2, 1, 2)
+plt.imshow(X_recovered)
+plt.title('Compressed, with {} colors'.format(K))
+
+input('ex7 Finished. Press ENTER to exit')
 
 
 
